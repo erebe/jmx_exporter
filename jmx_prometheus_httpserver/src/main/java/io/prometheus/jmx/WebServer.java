@@ -1,6 +1,5 @@
 package io.prometheus.jmx;
 
-import io.prometheus.client.exporter.MetricsServlet;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -11,6 +10,7 @@ import java.net.InetSocketAddress;
 public class WebServer {
 
    public static void main(String[] args) throws Exception {
+     args = new String[] { "7199", "/home/erebe/progs/jmx_exporter/example_configs/cassandra.yml"};
      if (args.length < 2) {
        System.err.println("Usage: WebServer <[hostname:]port> <yaml configuration file>");
        System.exit(1);
@@ -34,7 +34,7 @@ public class WebServer {
      ServletContextHandler context = new ServletContextHandler();
      context.setContextPath("/");
      server.setHandler(context);
-     context.addServlet(new ServletHolder(new MetricsServlet()), "/metrics");
+     context.addServlet(new ServletHolder(new MetricsServletCache()), "/metrics");
      server.start();
      server.join();
    }
