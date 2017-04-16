@@ -1,20 +1,18 @@
 package io.prometheus.jmx;
 
+import io.prometheus.client.Collector;
+import io.prometheus.client.CollectorRegistry;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Enumeration;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import io.prometheus.client.Collector;
-import io.prometheus.client.CollectorRegistry;
-import io.prometheus.client.exporter.common.TextFormat;
 
 public class MetricsServletCache extends HttpServlet {
 
@@ -58,9 +56,8 @@ public class MetricsServletCache extends HttpServlet {
             Enumeration<Collector.MetricFamilySamples> samples = registry.metricFamilySamples();
             lock.writeLock().lock();
             try {
-                System.out.println("Updating the cache");
                 writerCache.getBuffer().setLength(0);
-                TextFormat.write004(writerCache, samples);
+                TextFormat.write004(writerCache, samples, now);
                 writerCache.flush();
             } finally {
                 lock.writeLock().unlock();
