@@ -31,6 +31,9 @@ public class MetricsServletCache extends HttpServlet {
         this(CollectorRegistry.defaultRegistry, DEFAULT_TTL_IN_SEC);
     }
 
+    public MetricsServletCache(int cache_ttl) {
+        this(CollectorRegistry.defaultRegistry, cache_ttl);
+    }
     /**
      * Construct a MetricsServletAccess for the given registry.
      */
